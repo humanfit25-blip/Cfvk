@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álvaro Castillejo | Programa Recuperación | Parte 2/2</title>
+<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com/)">
+<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com/)" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+/* Military Spanish Colors */
+--military-dark: #1a1f16;
+--military-olive: #3d4a2c;
+--military-green: #4a5d3a;
+--military-earth: #5c4f3c;
+--military-gold: #d4af37;
+--military-gold-dark: #b8911f;
+--spanish-red: #c60b1e;
+--text-primary: #e8e6e1;
+--text-secondary: #a8a598;
+--text-muted: #6b6b5a;
+--border-color: #4a5d3a;
+--shadow-color: rgba(0, 0, 0, 0.6);
+}
+
+```
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Roboto Mono', monospace;
+        background: linear-gradient(135deg, var(--military-dark) 0%, #0f1410 50%, var(--military-dark) 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Subtle military pattern overlay */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(77, 93, 58, 0.03) 10px, rgba(77, 93, 58, 0.03) 20px),
+            repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(77, 93, 58, 0.03) 10px, rgba(77, 93, 58, 0.03) 20px);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header Section */
+    .header {
+        background: linear-gradient(135deg, var(--military-olive), var(--military-green));
+        border: 2px solid var(--military-gold);
+        border-radius: 0;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow:
+            0 8px 16px var(--shadow-color),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        animation: slideDown 0.8s ease-out;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        animation: shine 3s infinite;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes shine {
+        0%, 100% { transform: translateX(-100%); }
+        50% { transform: translateX(100%); }
+    }
+
+    .athlete-name {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--military-gold);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .program-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .medical-note {
+        background: rgba(198, 11, 30, 0.15);
+        border-left: 4px solid var(--spanish-red);
+        padding: 15px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+    }
+
+    .medical-note strong {
+        color: var(--spanish-red);
+        font-weight: 700;
+    }
+
+    .progress-bar-container {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        height: 30px;
+        overflow: hidden;
+        position: relative;
+        margin-top: 20px;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg, var(--military-gold-dark), var(--military-gold));
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--military-dark);
+        position: relative;
+        animation: progressLoad 1.5s ease-out;
+    }
+
+    @keyframes progressLoad {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+
+    .progress-text {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 700;
+    }
+
+    /* Completion Badge */
+    .completion-badge {
+        background: linear-gradient(135deg, var(--spanish-red), #a00916);
+        border: 2px solid var(--military-gold);
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 30px;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+    }
+
+    .completion-badge h2 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.8rem;
+        color: var(--military-gold);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    .completion-badge p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Day Cards */
+    .day-card {
+        background: linear-gradient(135deg, rgba(61, 74, 44, 0.4), rgba(47, 59, 28, 0.4));
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--military-gold);
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 8px;
+        box-shadow: 0 6px 12px var(--shadow-color);
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.6s ease-out backwards;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .day-card:nth-child(1) { animation-delay: 0.1s; }
+    .day-card:nth-child(2) { animation-delay: 0.2s; }
+    .day-card:nth-child(3) { animation-delay: 0.3s; }
+    .day-card:nth-child(4) { animation-delay: 0.4s; }
+    .day-card:nth-child(5) { animation-delay: 0.5s; }
+    .day-card:nth-child(6) { animation-delay: 0.6s; }
+    .day-card:nth-child(7) { animation-delay: 0.7s; }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .day-number {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--military-gold);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .day-focus {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        text-align: right;
+        letter-spacing: 1px;
+    }
+
+    .section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.3rem;
+        color: var(--military-gold);
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
+        display: inline-block;
+        position: relative;
+        padding-left: 15px;
+    }
+
+    .section-title::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--spanish-red);
+    }
+
+    .exercise-block {
+        background: rgba(0, 0, 0, 0.25);
+        padding: 15px;
+        margin-bottom: 12px;
+        border-radius: 4px;
+        border-left: 3px solid var(--military-earth);
+    }
+
+    .exercise-header {
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    .exercise-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .exercise-list li {
+        padding: 6px 0;
+        padding-left: 20px;
+        position: relative;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .exercise-list li::before {
+        content: '•';
+        position: absolute;
+        left: 5px;
+        color: var(--military-gold);
+        font-weight: bold;
+    }
+
+    .superset {
+        background: rgba(212, 175, 55, 0.1);
+        border-left-color: var(--military-gold);
+    }
+
+    .rehab {
+        background: rgba(198, 11, 30, 0.1);
+        border-left-color: var(--spanish-red);
+    }
+
+    .core-work {
+        background: rgba(74, 93, 58, 0.15);
+        border-left-color: var(--military-green);
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 30px;
+        margin-top: 40px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .footer-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, var(--military-olive), var(--military-green));
+        border: 1px solid var(--military-gold);
+        border-radius: 4px;
+        color: var(--military-gold);
+        font-weight: 700;
+        margin-top: 15px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        .athlete-name {
+            font-size: 2rem;
+        }
+
+        .day-number {
+            font-size: 2rem;
+        }
+
+        .day-focus {
+            font-size: 0.9rem;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .header {
+            padding: 20px;
+        }
+
+        .completion-badge h2 {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+
+```
+
+</head>
+<body>
+<div class="container">
+<!-- Header -->
+<header class="header">
+<h1 class="athlete-name">Álvaro Castillejo</h1>
+<p class="program-title">Programa de Recuperación — 12 Días</p>
+
+```
+        <div class="medical-note">
+            <strong>⚠ RECUPERACIÓN:</strong> Posible tendinitis supraespinosa con posible afectación al codo. Programa shoulder-friendly con trabajo de rehab integrado.
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                DÍAS 6-12 — FASE FINAL
+            </div>
+            <span class="progress-text">12/12 SESIONES</span>
+        </div>
+    </header>
+
+    <!-- Completion Badge -->
+    <div class="completion-badge">
+        <h2>🎖️ ÚLTIMA FASE DEL PROGRAMA</h2>
+        <p>Completa estas 7 sesiones para finalizar tu programa de recuperación</p>
+    </div>
+
+    <!-- Day 6 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 6</div>
+            <div class="day-focus">Conditioning + Posterior Chain + Shoulder Care</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Warm Up</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>5' easy bike + shoulder mobility</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Conditioning – 20' EMOM</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>1 – 12 KB Swings</li>
+                    <li>2 – 10 Burpees</li>
+                    <li>3 – 15 Air Squats</li>
+                    <li>4 – Rest</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Good Mornings</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>4 × 10 (light/moderate)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Accessory – 3 Super Sets</h3>
+            <div class="exercise-block superset">
+                <ul class="exercise-list">
+                    <li>15 GHD Hip Extensions</li>
+                    <li>20 Reverse Hypers</li>
+                    <li>20 Calf Raises</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <div class="exercise-header">3 Rounds:</div>
+                <ul class="exercise-list">
+                    <li>15 Banded ER</li>
+                    <li>15 Banded IR</li>
+                    <li>10 Scapular "W" lifts</li>
+                    <li>10 Tempo Lat Pulldown (3–1–3)</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 7 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 7</div>
+            <div class="day-focus">Leg Day (Glutes & Hamstrings)</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Warm Up</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>8' row + hip mobility</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Front Squat</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>5 × 5 @ RPE 7</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Superset</h3>
+            <div class="exercise-block superset">
+                <div class="exercise-header">4 Rounds</div>
+                <ul class="exercise-list">
+                    <li>10 Bulgarian Split Squats</li>
+                    <li>10 Hip Thrusts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Accessory</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>3 × 12 Leg Curl</li>
+                    <li>3 × 15 Glute Bridge March</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Core</h3>
+            <div class="exercise-block core-work">
+                <div class="exercise-header">2 Rounds:</div>
+                <ul class="exercise-list">
+                    <li>20 Toe Touches</li>
+                    <li>40 Sit-ups</li>
+                    <li>20 Reverse Crunch</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <ul class="exercise-list">
+                    <li>20 Band Pull-Aparts</li>
+                    <li>12 Scapular Circles</li>
+                    <li>20" Isometric shoulder ER hold</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 8 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 8</div>
+            <div class="day-focus">Upper (Vertical) — Shoulder-Safe Modified</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Warm Up</h3>
+            <div class="exercise-block">
+                <div class="exercise-header">3 Rounds:</div>
+                <ul class="exercise-list">
+                    <li>Scap push-ups</li>
+                    <li>Band ER</li>
+                    <li>Band Y raises</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Half-Kneeling Landmine Press</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>5 × 8 each side</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Supersets – 4 Rounds</h3>
+            <div class="exercise-block superset">
+                <ul class="exercise-list">
+                    <li>10 Lat Pulldown (neutral grip)</li>
+                    <li>12 DB High Row (NOT upright row; rowing angle)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">3 Sets</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>12 Incline DB Bench (neutral grip, 0–45°)</li>
+                    <li>12 Seal Row</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Arms</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>15 Hammer Curls</li>
+                    <li>20 Triceps Rope Pushdowns</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <ul class="exercise-list">
+                    <li>10 Cuban Rotations (light DBs)</li>
+                    <li>12 Prone YTWL (controlled)</li>
+                    <li>20 Band Pull-Aparts</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 9 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 9</div>
+            <div class="day-focus">Capacity + Legs</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Warm Up</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>5' SkiErg</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Capacity – 18' AMRAP</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>10 DB Snatch (light, alternating)</li>
+                    <li>15 Box Step-Ups</li>
+                    <li>200 m Run</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Back Rack Lunges</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>4 × 8/8</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Accessory</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>3 × 15 Leg Press</li>
+                    <li>3 × 20 Air Squats (tempo 3–1–1)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <ul class="exercise-list">
+                    <li>20 Band ER</li>
+                    <li>20 Band Pull-Aparts</li>
+                    <li>12 Scapular Shrug Holds (3s)</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 10 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 10</div>
+            <div class="day-focus">Deadlift + Core + Conditioning</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Deadlift Technique Wave</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>3 × (5 @ 55%, 4 @ 65%, 3 @ 75%)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Accessory</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>4 × 10 RDL</li>
+                    <li>4 × 12 Back Extensions</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Conditioning – 12' AMRAP</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>12 Cal BikeErg</li>
+                    <li>10 Burpees</li>
+                    <li>15 KB Deadlifts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Core</h3>
+            <div class="exercise-block core-work">
+                <div class="exercise-header">3 Rounds:</div>
+                <ul class="exercise-list">
+                    <li>20 Russian Twists</li>
+                    <li>20 Hollow Rocks</li>
+                    <li>40 Flutter Kicks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <ul class="exercise-list">
+                    <li>12 Scap Push-Ups</li>
+                    <li>12 Band ER</li>
+                    <li>15 Face Pulls</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 11 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 11</div>
+            <div class="day-focus">Full Body Strength</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Warm Up</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>10' mix row + mobility</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Clean Pulls (No catch)</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>5 × 4 @ moderate-heavy</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Supersets – 4 Rounds</h3>
+            <div class="exercise-block superset">
+                <ul class="exercise-list">
+                    <li>10 Landmine Rows</li>
+                    <li>8 DB Floor Press (heavy-ish)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Supersets – 3 Rounds</h3>
+            <div class="exercise-block superset">
+                <ul class="exercise-list">
+                    <li>15 Hip Thrusts</li>
+                    <li>20 Reverse Lunges</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Arms</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>12 Curls</li>
+                    <li>20 Triceps Extensions</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab</h3>
+            <div class="exercise-block rehab">
+                <ul class="exercise-list">
+                    <li>10 Wall Angels</li>
+                    <li>15 Banded ER</li>
+                    <li>20 Scapular Retractions</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Day 12 -->
+    <article class="day-card">
+        <div class="day-header">
+            <div class="day-number">DÍA 12</div>
+            <div class="day-focus">Conditioning + Glutes + Shoulder Finisher</div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Conditioning – 5 Rounds For Time</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>400 m Run</li>
+                    <li>20 Goblet Squats</li>
+                    <li>15 Burpees</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Strength – Glute Circuit (3 Rounds)</h3>
+            <div class="exercise-block">
+                <ul class="exercise-list">
+                    <li>12 Hip Thrust</li>
+                    <li>12 KB RDL</li>
+                    <li>20 Glute Bridge</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Core</h3>
+            <div class="exercise-block core-work">
+                <ul class="exercise-list">
+                    <li>50 Sit-Ups</li>
+                    <li>30 V-Ups</li>
+                    <li>1' Plank</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Shoulder Rehab Finisher</h3>
+            <div class="exercise-block rehab">
+                <div class="exercise-header">4 Rounds:</div>
+                <ul class="exercise-list">
+                    <li>12 Face Pulls</li>
+                    <li>20 Band Pull-Aparts</li>
+                    <li>10 External Rotation Lift-Offs</li>
+                    <li>20'' Side-Lying ER Isometric Hold</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>🎖️ <strong>¡nivel basico!</strong> 🎖️</p>
+        <p>12 días de trabajo shoulder-friendly con rehab integrado</p>
+        <p>humanfit | </p>
+        <div class="footer-badge">¡MISIÓN CUMPLIDA, SOLDADO!</div>
+    </footer>
+</div>
+
+```
+
+</body>
+</html>
